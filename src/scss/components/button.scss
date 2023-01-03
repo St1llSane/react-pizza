@@ -146,3 +146,15 @@
     }
   }
 }
+
+@media (max-width: 700px) {
+	.button {
+		&--cart {
+			padding: 7px 12px;
+		}
+
+		&--add {
+			padding: 9px 13px
+		}
+	}
+}
