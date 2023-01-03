@@ -1,6 +1,16 @@
+import { useState } from 'react'
 import '../../scss/components/sort.scss'
 
 function Sort() {
+  const [sortPopupVisible, setSortPopupVisible] = useState(false)
+  const [selectedPopupItem, setSelectedPopupItem] = useState(0)
+  const popupItems = ['популярности', 'цене', 'алфавиту']
+
+  const onClickSortItem = (index) => {
+    setSelectedPopupItem(index)
+    setSortPopupVisible(false)
+  }
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,15 +27,25 @@ function Sort() {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <button onClick={() => setSortPopupVisible(!sortPopupVisible)}>
+          {popupItems[selectedPopupItem]}
+        </button>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {sortPopupVisible ? (
+        <div className="sort__popup">
+          <ul>
+            {popupItems.map((item, index) => (
+              <li
+                className={selectedPopupItem === index ? 'active' : ''}
+                onClick={() => onClickSortItem(index)}
+                key={item}
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
     </div>
   )
 }
