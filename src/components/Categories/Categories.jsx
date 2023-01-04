@@ -1,9 +1,6 @@
 import '../../scss/components/categories.scss'
-import { useState } from 'react'
 
-function Categories() {
-  const [activeCategory, setActiveCategory] = useState(0)
-
+function Categories({ activeCategory, onClickCategory }) {
   const categories = [
     'Все',
     'Мясные',
@@ -19,7 +16,7 @@ function Categories() {
         {categories.map((category, index) => (
           <li
             className={activeCategory === index ? 'active' : ''}
-            onClick={() => setActiveCategory(index)}
+            onClick={() => onClickCategory(index)}
             key={index}
           >
             {category}

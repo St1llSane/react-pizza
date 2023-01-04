@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import '../../scss/components/sort.scss'
 
-function Sort() {
+function Sort({ selectedSortItem, onSelectSort }) {
   const [sortPopupVisible, setSortPopupVisible] = useState(false)
-  const [selectedPopupItem, setSelectedPopupItem] = useState(0)
-  const popupItems = ['популярности', 'цене', 'алфавиту']
+  const popupItems = [
+    { name: 'Дороже', sortProp: 'price&order=desc' },
+    { name: 'Дешевле', sortProp: 'price&order=asc' },
+    { name: 'Популярное', sortProp: 'rating&order=desc' },
+  ]
 
-  const onClickSortItem = (index) => {
-    setSelectedPopupItem(index)
+  const onClickSortItem = (sortProp) => {
+    onSelectSort(sortProp)
     setSortPopupVisible(false)
   }
 
@@ -28,19 +31,21 @@ function Sort() {
         </svg>
         <b>Сортировка по:</b>
         <button onClick={() => setSortPopupVisible(!sortPopupVisible)}>
-          {popupItems[selectedPopupItem]}
+          {selectedSortItem.name}
         </button>
       </div>
       {sortPopupVisible ? (
         <div className="sort__popup">
           <ul>
-            {popupItems.map((item, index) => (
+            {popupItems.map((obj) => (
               <li
-                className={selectedPopupItem === index ? 'active' : ''}
-                onClick={() => onClickSortItem(index)}
-                key={item}
+                className={
+                  selectedSortItem.sortProp === obj.sortProp ? 'active' : ''
+                }
+                onClick={() => onClickSortItem(obj)}
+                key={obj.name}
               >
-                {item}
+                {obj.name}
               </li>
             ))}
           </ul>
