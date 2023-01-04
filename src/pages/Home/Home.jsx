@@ -4,7 +4,7 @@ import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
 import PizzaBlock from '../../components/PizzaBlock'
 
-function Home() {
+function Home({ searchPizzasQuery }) {
   const [pizzas, setPizzas] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(0)
@@ -13,7 +13,6 @@ function Home() {
     sortProp: 'price&order=desc',
   })
 
-  console.log(selectedSortItem)
   const searchByCategory =
     activeCategory > 0 ? `category=${activeCategory}` : ''
 
@@ -31,6 +30,21 @@ function Home() {
     window.scrollTo(0, 0)
   }, [activeCategory, selectedSortItem])
 
+  const skeletonPizzasRender = [...new Array(7).keys()].map((key) => (
+    <PizzaBlockSkeleton key={key} />
+  ))
+
+  const searchedPizzas =
+    searchPizzasQuery.length > 0
+      ? pizzas.filter((pizza) =>
+          pizza.name.toLowerCase().includes(searchPizzasQuery.toLowerCase())
+        )
+      : pizzas
+
+  const pizzasRender = searchedPizzas.map((pizza) => (
+    <PizzaBlock {...pizza} key={pizza.name} />
+  ))
+
   return (
     <>
       <div className="content__top">
@@ -45,11 +59,7 @@ function Home() {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoading
-          ? [...new Array(7).keys()].map((key) => (
-              <PizzaBlockSkeleton key={key} />
-            ))
-          : pizzas.map((pizza) => <PizzaBlock {...pizza} key={pizza.name} />)}
+        {isLoading ? skeletonPizzasRender : pizzasRender}
       </div>
     </>
   )
