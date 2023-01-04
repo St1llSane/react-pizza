@@ -3,6 +3,7 @@ import Categories from '../../components/Categories'
 import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
 import PizzaBlock from '../../components/PizzaBlock'
+import Pagination from '../../components/Pagination'
 
 function Home({ searchPizzasQuery }) {
   const [pizzas, setPizzas] = useState([])
@@ -19,7 +20,7 @@ function Home({ searchPizzasQuery }) {
   useEffect(() => {
     setIsLoading(true)
     fetch(
-      `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?${searchByCategory}&sortBy=${selectedSortItem.sortProp}`
+      `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=1&limit=4${searchByCategory}&sortBy=${selectedSortItem.sortProp}`
     )
       .then((res) => res.json())
       .then((json) => {
@@ -61,6 +62,7 @@ function Home({ searchPizzasQuery }) {
       <div className="content__items">
         {isLoading ? skeletonPizzasRender : pizzasRender}
       </div>
+      <Pagination />
     </>
   )
 }
