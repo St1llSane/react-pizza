@@ -67,9 +67,6 @@
       width: 220px;
     }
 
-    &__bottom {
-    }
-
     &__price {
       font-size: 20px;
     }
@@ -87,19 +84,18 @@
 @media (max-width: 400px) {
   .pizza-block {
     &__selector {
-
       ul {
-				display: flex;
-				flex-wrap: wrap;
+        display: flex;
+        flex-wrap: wrap;
 
-				li.pizza-block__selector-type {
-					flex: none;
-				}
+        li.pizza-block__selector-type {
+          flex: none;
+        }
       }
 
       &-type {
         width: 100%;
-				flex: none;
+        flex: none;
       }
     }
   }
