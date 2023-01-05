@@ -9,8 +9,8 @@ function Pagination({ pizzasCount, onChangePage }) {
         breakLabel="..."
         nextLabel=">"
         onPageChange={(page) => onChangePage(page.selected + 1)}
-        pageRangeDisplayed={3}
-        pageCount={Math.ceil(pizzasCount / 3)}
+        pageRangeDisplayed={4}
+        pageCount={Math.ceil(pizzasCount / 4)}
         previousLabel="<"
         renderOnZeroPageCount={null}
       />

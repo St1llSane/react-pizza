@@ -1,16 +1,24 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setActiveSort } from '../../redux/slices/filterSlice'
 import '../../scss/components/sort.scss'
 
-function Sort({ selectedSortItem, onSelectSort }) {
-  const [sortPopupVisible, setSortPopupVisible] = useState(false)
-  const popupItems = [
-    { name: 'Дороже', sortProp: 'price&order=desc' },
-    { name: 'Дешевле', sortProp: 'price&order=asc' },
-    { name: 'Популярное', sortProp: 'rating&order=desc' },
-  ]
+const popupItems = [
+  { name: 'Дороже', sortProp: 'price&order=desc' },
+  { name: 'Дешевле', sortProp: 'price&order=asc' },
+  { name: 'Популярное', sortProp: 'rating&order=desc' },
+]
 
-  const onClickSortItem = (sortProp) => {
-    onSelectSort(sortProp)
+function Sort() {
+  const dispatch = useDispatch()
+  const selectedSortItem = useSelector(
+    (state) => state.filterSlice.selectedSortItem
+  )
+
+  const [sortPopupVisible, setSortPopupVisible] = useState(false)
+
+  const onClickSortItem = (obj) => {
+    dispatch(setActiveSort(obj))
     setSortPopupVisible(false)
   }
 

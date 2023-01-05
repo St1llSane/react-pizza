@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setActiveCategory } from '../../redux/slices/filterSlice'
 import Categories from '../../components/Categories'
 import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
@@ -10,40 +12,54 @@ function Home({ searchPizzasQuery }) {
   const [pizzasCount, setPizzasCount] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState(0)
-  const [selectedSortItem, setSelectedSortItem] = useState({
-    name: 'Дороже',
-    sortProp: 'price&order=desc',
-  })
+  const { activeCategory, selectedSortItem } = useSelector(
+    (state) => state.filterSlice
+  )
+
+  const dispatch = useDispatch()
+  const onChangeCategory = (index) => {
+    dispatch(setActiveCategory(index))
+  }
 
   const searchByCategory =
     activeCategory > 0 ? `category=${activeCategory}` : ''
+  const searchBySort = `sortBy=${selectedSortItem.sortProp}`
+  const searchByInput = searchPizzasQuery ? `search=${searchPizzasQuery}` : ''
 
   useEffect(() => {
     setIsLoading(true)
-    fetch(
-      `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=3&${searchByCategory}&sortBy=${selectedSortItem.sortProp}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setPizzas(json.pizzas)
-        setPizzasCount(json.count)
-        setIsLoading(false)
-      })
-  }, [activeCategory, selectedSortItem, currentPage])
+    try {
+      fetch(
+        `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=4&${searchByCategory}&${searchBySort}&${searchByInput}`
+      )
+        .then((res) => res.json())
+        .then((json) => {
+          setPizzas(json.pizzas)
+          setPizzasCount(json.count)
+          setIsLoading(false)
+        })
+    } catch (error) {
+      alert('Ошибка при получении пицц')
+    }
+  }, [
+    activeCategory,
+    selectedSortItem.sortProp,
+    searchPizzasQuery,
+    currentPage,
+  ])
 
   const skeletonPizzasRender = [...new Array(7).keys()].map((key) => (
     <PizzaBlockSkeleton key={key} />
   ))
 
-  const searchedPizzas =
-    searchPizzasQuery.length > 0
-      ? pizzas.filter((pizza) =>
-          pizza.name.toLowerCase().includes(searchPizzasQuery.toLowerCase())
-        )
-      : pizzas
+  // const searchedPizzas =
+  //   searchPizzasQuery.length > 0
+  //     ? pizzas.filter((pizza) =>
+  //         pizza.name.toLowerCase().includes(searchPizzasQuery.toLowerCase())
+  //       )
+  //     : pizzas
 
-  const pizzasRender = searchedPizzas.map((pizza) => (
+  const pizzasRender = pizzas.map((pizza) => (
     <PizzaBlock {...pizza} key={pizza.name} />
   ))
 
@@ -52,12 +68,9 @@ function Home({ searchPizzasQuery }) {
       <div className="content__top">
         <Categories
           activeCategory={activeCategory}
-          onClickCategory={(index) => setActiveCategory(index)}
+          onClickCategory={onChangeCategory}
         />
-        <Sort
-          selectedSortItem={selectedSortItem}
-          onSelectSort={(sortProp) => setSelectedSortItem(sortProp)}
-        />
+        <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
