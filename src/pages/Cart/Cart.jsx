@@ -468,6 +468,7 @@ function Cart() {
           <Link
             to="/"
             className="button button--outline button--add go-back-btn"
+            onClick={() => window.scrollTo(0, 0)}
           >
             <svg
               width="8"

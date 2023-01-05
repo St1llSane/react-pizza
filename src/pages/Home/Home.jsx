@@ -7,6 +7,8 @@ import Pagination from '../../components/Pagination'
 
 function Home({ searchPizzasQuery }) {
   const [pizzas, setPizzas] = useState([])
+  const [pizzasCount, setPizzasCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState(0)
   const [selectedSortItem, setSelectedSortItem] = useState({
@@ -20,16 +22,15 @@ function Home({ searchPizzasQuery }) {
   useEffect(() => {
     setIsLoading(true)
     fetch(
-      `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=1&limit=4${searchByCategory}&sortBy=${selectedSortItem.sortProp}`
+      `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=3&${searchByCategory}&sortBy=${selectedSortItem.sortProp}`
     )
       .then((res) => res.json())
       .then((json) => {
-        setPizzas(json)
+        setPizzas(json.pizzas)
+        setPizzasCount(json.count)
         setIsLoading(false)
       })
-
-    window.scrollTo(0, 0)
-  }, [activeCategory, selectedSortItem])
+  }, [activeCategory, selectedSortItem, currentPage])
 
   const skeletonPizzasRender = [...new Array(7).keys()].map((key) => (
     <PizzaBlockSkeleton key={key} />
@@ -62,7 +63,10 @@ function Home({ searchPizzasQuery }) {
       <div className="content__items">
         {isLoading ? skeletonPizzasRender : pizzasRender}
       </div>
-      <Pagination />
+      <Pagination
+        pizzasCount={pizzasCount}
+        onChangePage={(page) => setCurrentPage(page)}
+      />
     </>
   )
 }

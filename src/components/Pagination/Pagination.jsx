@@ -1,16 +1,16 @@
 import ReactPaginate from 'react-paginate'
 import '../../scss/components/pagination.scss'
 
-function Pagination() {
+function Pagination({ pizzasCount, onChangePage }) {
   return (
     <>
       <ReactPaginate
         className="pagination"
         breakLabel="..."
         nextLabel=">"
-        onPageChange={(e) => console.log(e)}
-        pageRangeDisplayed={5}
-        pageCount={3}
+        onPageChange={(page) => onChangePage(page.selected + 1)}
+        pageRangeDisplayed={3}
+        pageCount={Math.ceil(pizzasCount / 3)}
         previousLabel="<"
         renderOnZeroPageCount={null}
       />
