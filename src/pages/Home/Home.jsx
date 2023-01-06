@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setActiveCategory } from '../../redux/slices/filterSlice'
+import {
+  setActiveCategory,
+  setCurrentPage,
+} from '../../redux/slices/filterSlice'
 import Categories from '../../components/Categories'
 import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
@@ -11,18 +14,18 @@ import axios from 'axios'
 function Home() {
   const [pizzas, setPizzas] = useState([])
   const [pizzasCount, setPizzasCount] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
   const searchPizzasQuery = useSelector(
-    (state) => state.searchPizzasQuery
+    (state) => state.searchPizzasQuery.searchPizzas
   )
-  const { activeCategory, selectedSortItem } = useSelector(
+  const { activeCategory, selectedSortItem, currentPage } = useSelector(
     (state) => state.filterSlice
   )
 
   const dispatch = useDispatch()
   const onChangeCategory = (index) => {
     dispatch(setActiveCategory(index))
+    dispatch(setCurrentPage(1))
   }
 
   const searchByCategory =
@@ -51,6 +54,10 @@ function Home() {
     searchPizzasQuery,
     currentPage,
   ])
+
+  const onChangePage = (num) => {
+    dispatch(setCurrentPage(num))
+  }
 
   const skeletonPizzasRender = [...new Array(7).keys()].map((key) => (
     <PizzaBlockSkeleton key={key} />
@@ -81,8 +88,9 @@ function Home() {
         {isLoading ? skeletonPizzasRender : pizzasRender}
       </div>
       <Pagination
+        currentPage={currentPage}
         pizzasCount={pizzasCount}
-        onChangePage={(page) => setCurrentPage(page)}
+        onChangePage={onChangePage}
       />
     </>
   )

@@ -1,33 +1,36 @@
 import debounce from 'lodash.debounce'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useRef, useCallback, useState } from 'react'
 import {
   setSearchPizzasQuery,
   resetPizzasQuery,
 } from '../../redux/slices/searchPizzasQuery'
+import {setCurrentPage} from '../../redux/slices/filterSlice'
 import '../../scss/components/search.scss'
 
 function Search() {
   const searchInputRef = useRef(null)
   const [value, setValue] = useState('')
-  const searchPizzasQuery = useSelector(
-    (state) => state.searchPizzasQuery.searchPizzas
-  )
-
-  const dispatch = useDispatch()
-  // const onSearchInput = useCallback(
-  //   debounce((e) => {
-  //     dispatch(setSearchPizzasQuery(e.target.value))
-  //   }, 1000),
-  //   []
+  // const searchPizzasQuery = useSelector(
+  //   (state) => state.searchPizzasQuery.searchPizzas
   // )
 
+  const dispatch = useDispatch()
+  const updateSearchInput = useCallback(
+    debounce((value) => {
+      dispatch(setSearchPizzasQuery(value))
+      dispatch(setCurrentPage(1))
+    }, 1000),
+    []
+  )
+
   const onSearchInput = (e) => {
-    // dispatch(setSearchPizzasQuery(e.target.value))
     setValue(e.target.value)
+    updateSearchInput(e.target.value)
   }
 
   const onResetInput = () => {
+    setValue('')
     dispatch(resetPizzasQuery(''))
     searchInputRef.current.focus()
   }
