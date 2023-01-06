@@ -6,12 +6,16 @@ import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
 import PizzaBlock from '../../components/PizzaBlock'
 import Pagination from '../../components/Pagination'
+import axios from 'axios'
 
-function Home({ searchPizzasQuery }) {
+function Home() {
   const [pizzas, setPizzas] = useState([])
   const [pizzasCount, setPizzasCount] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
+  const searchPizzasQuery = useSelector(
+    (state) => state.searchPizzasQuery
+  )
   const { activeCategory, selectedSortItem } = useSelector(
     (state) => state.filterSlice
   )
@@ -29,13 +33,13 @@ function Home({ searchPizzasQuery }) {
   useEffect(() => {
     setIsLoading(true)
     try {
-      fetch(
-        `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=4&${searchByCategory}&${searchBySort}&${searchByInput}`
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          setPizzas(json.pizzas)
-          setPizzasCount(json.count)
+      axios
+        .get(
+          `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=4&${searchByCategory}&${searchBySort}&${searchByInput}`
+        )
+        .then((res) => {
+          setPizzas(res.data.pizzas)
+          setPizzasCount(res.data.count)
           setIsLoading(false)
         })
     } catch (error) {

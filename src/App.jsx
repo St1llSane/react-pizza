@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import Cart from './pages/Cart/Cart'
@@ -7,21 +6,13 @@ import NotFound from './pages/NotFound'
 import './scss/app.scss'
 
 function App() {
-  const [searchPizzasQuery, setSearchPizzasQuery] = useState('')
-
   return (
     <div className="wrapper">
-      <Header
-        searchPizzasQuery={searchPizzasQuery}
-        setSearchPizzasQuery={setSearchPizzasQuery}
-      />
+      <Header />
       <div className="content">
         <div className="container">
           <Routes>
-            <Route
-              path="/"
-              element={<Home searchPizzasQuery={searchPizzasQuery} />}
-            />
+            <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

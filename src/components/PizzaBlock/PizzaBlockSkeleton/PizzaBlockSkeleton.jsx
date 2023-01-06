@@ -8,7 +8,7 @@ const PizzaBlockSkeleton = (props) => (
     height={457}
     viewBox="0 0 280 457"
     backgroundColor="#f2f2f2"
-    foregroundColor="#ecebeb"
+    foregroundColor="#E7E7E7"
     {...props}
   >
     <circle cx="140" cy="124" r="125" />

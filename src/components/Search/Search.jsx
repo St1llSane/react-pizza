@@ -1,6 +1,37 @@
+import debounce from 'lodash.debounce'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRef, useCallback, useState } from 'react'
+import {
+  setSearchPizzasQuery,
+  resetPizzasQuery,
+} from '../../redux/slices/searchPizzasQuery'
 import '../../scss/components/search.scss'
 
-function Search({ searchPizzasQuery, setSearchPizzasQuery }) {
+function Search() {
+  const searchInputRef = useRef(null)
+  const [value, setValue] = useState('')
+  const searchPizzasQuery = useSelector(
+    (state) => state.searchPizzasQuery.searchPizzas
+  )
+
+  const dispatch = useDispatch()
+  // const onSearchInput = useCallback(
+  //   debounce((e) => {
+  //     dispatch(setSearchPizzasQuery(e.target.value))
+  //   }, 1000),
+  //   []
+  // )
+
+  const onSearchInput = (e) => {
+    // dispatch(setSearchPizzasQuery(e.target.value))
+    setValue(e.target.value)
+  }
+
+  const onResetInput = () => {
+    dispatch(resetPizzasQuery(''))
+    searchInputRef.current.focus()
+  }
+
   return (
     <div className="search">
       <label>
@@ -20,13 +51,11 @@ function Search({ searchPizzasQuery, setSearchPizzasQuery }) {
           className="search__input"
           type="text"
           placeholder="Поиск..."
-          value={searchPizzasQuery}
-          onChange={(e) => setSearchPizzasQuery(e.target.value)}
+          value={value}
+          ref={searchInputRef}
+          onChange={onSearchInput}
         />
-        <button
-          className="search__close"
-          onClick={() => setSearchPizzasQuery('')}
-        >
+        <button className="search__close" onClick={onResetInput}>
           <svg height="200" id="Layer_1" viewBox="0 0 200 200" width="200">
             <title />
             <path d="M114,100l49-49a9.9,9.9,0,0,0-14-14L100,86,51,37A9.9,9.9,0,0,0,37,51l49,49L37,149a9.9,9.9,0,0,0,14,14l49-49,49,49a9.9,9.9,0,0,0,14-14Z" />
