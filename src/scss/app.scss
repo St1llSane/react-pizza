@@ -120,6 +120,8 @@ body {
 	}
 
   &__item {
+		width: 100%;
+		max-width: 650px;
     display: flex;
 		flex-wrap: wrap;
     border-top: 1px solid $gray-line;
@@ -162,6 +164,7 @@ body {
       justify-content: space-between;
 			gap: 10px;
 			margin-right: 10px;
+			margin-left: auto;
 
       &-minus {
         svg {
