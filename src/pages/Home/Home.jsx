@@ -4,17 +4,15 @@ import {
   setActiveCategory,
   setCurrentPage,
 } from '../../redux/slices/filterSlice'
+import { fetchPizzas } from '../../redux/slices/pizzasSlice'
 import Categories from '../../components/Categories'
 import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
 import PizzaBlock from '../../components/PizzaBlock'
 import Pagination from '../../components/Pagination'
-import axios from 'axios'
 
 function Home() {
-  const [pizzas, setPizzas] = useState([])
-  const [pizzasCount, setPizzasCount] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const { pizzas, status } = useSelector((state) => state.pizzasSlice)
   const searchPizzasQuery = useSelector(
     (state) => state.searchPizzasQuery.searchPizzas
   )
@@ -34,20 +32,17 @@ function Home() {
   const searchByInput = searchPizzasQuery ? `search=${searchPizzasQuery}` : ''
 
   useEffect(() => {
-    setIsLoading(true)
-    try {
-      axios
-        .get(
-          `https://63b45a540f49ecf50888a07e.mockapi.io/pizzas?page=${currentPage}&limit=4&${searchByCategory}&${searchBySort}&${searchByInput}`
-        )
-        .then((res) => {
-          setPizzas(res.data.pizzas)
-          setPizzasCount(res.data.count)
-          setIsLoading(false)
-        })
-    } catch (error) {
-      alert('Ошибка при получении пицц')
-    }
+    dispatch(
+      fetchPizzas({
+        searchByCategory,
+        searchBySort,
+        searchByInput,
+        currentPage,
+      })
+    )
+    // dispatch(fetchPizzas(count))
+    // dispatch(setPizzas(data.pizzas))
+    // setPizzasCount(data.count)
   }, [
     activeCategory,
     selectedSortItem.sortProp,
@@ -62,13 +57,6 @@ function Home() {
   const skeletonPizzasRender = [...new Array(7).keys()].map((key) => (
     <PizzaBlockSkeleton key={key} />
   ))
-
-  // const searchedPizzas =
-  //   searchPizzasQuery.length > 0
-  //     ? pizzas.filter((pizza) =>
-  //         pizza.name.toLowerCase().includes(searchPizzasQuery.toLowerCase())
-  //       )
-  //     : pizzas
 
   const pizzasRender = pizzas.map((pizza) => (
     <PizzaBlock {...pizza} key={pizza.name} />
@@ -85,11 +73,10 @@ function Home() {
       </div>
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
-        {isLoading ? skeletonPizzasRender : pizzasRender}
+        {status === 'loading' ? skeletonPizzasRender : pizzasRender}
       </div>
       <Pagination
         currentPage={currentPage}
-        pizzasCount={pizzasCount}
         onChangePage={onChangePage}
       />
     </>
