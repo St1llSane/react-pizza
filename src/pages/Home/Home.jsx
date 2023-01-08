@@ -72,13 +72,17 @@ function Home() {
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {status === 'loading' ? skeletonPizzasRender : pizzasRender}
-      </div>
-      <Pagination
-        currentPage={currentPage}
-        onChangePage={onChangePage}
-      />
+      {status === 'error' ? (
+        <h3 style={{ textAlign: 'center', fontSize: '30px' }}>
+          Ошибка при загрузке товаров...
+        </h3>
+      ) : (
+        <div className="content__items">
+          {status === 'loading' ? skeletonPizzasRender : pizzasRender}
+        </div>
+      )}
+
+      <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </>
   )
 }
