@@ -5,7 +5,7 @@ import Search from '../Search'
 
 function Header() {
   const { products, totalPrice } = useSelector((state) => state.cartSlice)
-  const totalCount = products.reduce((summ, product) => summ + product.count, 0)
+  const totalCount = products.reduce((count, product) => count + product.count, 0)
 
   return (
     <div className="header">

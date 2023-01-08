@@ -22,7 +22,7 @@ function PizzaBlock({ id, imageUrl, name, types, sizes, price }) {
       name,
       price,
       type: typeNames[activeType],
-      size: activeSize,
+      size: sizes[activeSize],
     }
     dispatch(addProduct(item))
   }
