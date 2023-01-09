@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useRef } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setActiveSort } from '../../redux/slices/filterSlice'
+import { setActiveSort, sortSelector } from '../../redux/slices/filterSlice'
 import '../../scss/components/sort.scss'
 
 const popupItems = [
@@ -13,9 +13,7 @@ const popupItems = [
 
 function Sort() {
   const dispatch = useDispatch()
-  const selectedSortItem = useSelector(
-    (state) => state.filterSlice.selectedSortItem
-  )
+  const selectedSortItem = useSelector(sortSelector)
   const [sortPopupVisible, setSortPopupVisible] = useState(false)
   const sortPopup = useRef(null)
 

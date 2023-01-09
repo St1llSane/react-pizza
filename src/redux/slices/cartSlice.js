@@ -42,11 +42,16 @@ const cartSlice = createSlice({
     },
     clearProducts: (state) => {
       state.products = []
-			state.totalPrice = 0
+      state.totalPrice = 0
     },
   },
 })
 
-export const { addProduct, removeProduct, minusProduct, clearProducts } = cartSlice.actions
+export const cartSelector = (state) => state.cartSlice
+export const cartItemByIdSelector = (id) => (state) =>
+  state.cartSlice.products.find((product) => product.id === id)
+
+export const { addProduct, removeProduct, minusProduct, clearProducts } =
+  cartSlice.actions
 
 export default cartSlice.reducer

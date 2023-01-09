@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  filtersSelector,
   setActiveCategory,
   setCurrentPage,
 } from '../../redux/slices/filterSlice'
-import { fetchPizzas } from '../../redux/slices/pizzasSlice'
+import { fetchPizzas, pizzasSelector } from '../../redux/slices/pizzasSlice'
+import { searchPizzasQuerySelector } from '../../redux/slices/searchPizzasQuery'
 import Categories from '../../components/Categories'
 import Sort from '../../components/Sort'
 import PizzaBlockSkeleton from '../../components/PizzaBlock/PizzaBlockSkeleton'
@@ -12,13 +14,10 @@ import PizzaBlock from '../../components/PizzaBlock'
 import Pagination from '../../components/Pagination'
 
 function Home() {
-  const { pizzas, status } = useSelector((state) => state.pizzasSlice)
-  const searchPizzasQuery = useSelector(
-    (state) => state.searchPizzasQuery.searchPizzas
-  )
-  const { activeCategory, selectedSortItem, currentPage } = useSelector(
-    (state) => state.filterSlice
-  )
+  const { pizzas, status } = useSelector(pizzasSelector)
+  const searchPizzasQuery = useSelector(searchPizzasQuerySelector)
+  const { activeCategory, selectedSortItem, currentPage } =
+    useSelector(filtersSelector)
 
   const dispatch = useDispatch()
   const onChangeCategory = (index) => {

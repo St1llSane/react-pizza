@@ -17,6 +17,8 @@ const searchPizzasQuery = createSlice({
   },
 })
 
+export const searchPizzasQuerySelector = (state) => state.searchPizzasQuery.searchPizzas
+
 export const { setSearchPizzasQuery, resetPizzasQuery } =
   searchPizzasQuery.actions
 
