@@ -6,7 +6,13 @@ import Search from '../Search'
 
 function Header() {
   const { products, totalPrice } = useSelector(cartSelector)
-  const totalCount = products.reduce((count, product) => count + product.count, 0)
+  // const location = useLocation()
+  // console.log(location)
+
+  const totalCount = products.reduce(
+    (count, product) => count + product.count,
+    0
+  )
 
   return (
     <div className="header">
