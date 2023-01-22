@@ -17,7 +17,9 @@ function CartItem({ id, imageUrl, name, price, type, size, count }) {
   }
 
   const onClickMinus = () => {
-    dispatch(minusProduct(id))
+    if (count >= 2) {
+      dispatch(minusProduct(id))
+    }
   }
 
   const onClickRemove = () => {
@@ -31,7 +33,9 @@ function CartItem({ id, imageUrl, name, price, type, size, count }) {
       </div>
       <div className="cart__item-info">
         <h3>{name}</h3>
-        <p>{type} тесто, {size} см.</p>
+        <p>
+          {type} тесто, {size} см.
+        </p>
       </div>
       <div className="cart__item-count">
         <button

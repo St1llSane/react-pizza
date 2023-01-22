@@ -28,6 +28,9 @@ const cartSlice = createSlice({
       }, 0)
     },
     removeProduct: (state, action) => {
+			if (state.products.length >= 1) {
+				state.totalPrice = 0
+			}
       state.products = state.products.filter(
         (product) => product.id !== action.payload
       )
